@@ -1,1 +1,61 @@
 @import '_vars';
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.app {
+  width: 100%;
+  height: 100vh;
+  
+  background-color: $bg;
+}
+
+.grid {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  grid-column-gap: 2px;
+  grid-row-gap: 2px;
+}
+
+.grid__cell {
+  background-color: $highlight;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border: 2px solid $highlight;
+  color: $active;
+
+
+  transition: all .1s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    border: 2px solid $text;
+  }
+}
+
+.grid__cell_active {
+    background-color: $text;
+}
+
+.grid__cell_disabled {
+  cursor: unset;
+  background-color: $main;
+  border: none;
+
+  
+  &:hover {
+    cursor: unset;
+    background-color: $main;
+    border: none;
+  
+  }
+}

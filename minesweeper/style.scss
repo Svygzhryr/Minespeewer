@@ -59,3 +59,12 @@
   
   }
 }
+
+.bomb {
+  color: transparent;
+  font-size: 50px;
+}
+
+.exposed {
+  color: $alt-active;
+}

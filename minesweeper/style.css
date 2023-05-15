@@ -48,4 +48,13 @@
   cursor: unset;
   background-color: #16161e;
   border: none;
+}
+
+.bomb {
+  color: transparent;
+  font-size: 50px;
+}
+
+.exposed {
+  color: #c96360;
 }/*# sourceMappingURL=style.css.map */

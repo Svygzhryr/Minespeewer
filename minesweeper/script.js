@@ -17,9 +17,24 @@ let generateCells = function() {
     //   cell.innerHTML = `${x} </br> ${y}`;
       grid.appendChild(cell);
   }
+
 }
 
-generateCells();
+let setBombs = function() {
+  let bombs = 10;
+
+  for (bombs; bombs > 0; bombs--) {
+    let randomPos = Math.round(Math.random() * 99);
+    let cell = document.querySelector(`.cell${randomPos}`)
+    console.log(randomPos);
+    if (cell.classList.contains('bomb')) {
+      bombs++;
+    } else {
+      cell.classList.add('bomb');
+      cell.innerHTML = '*';
+    }
+  }
+}
 
 let handleCellDown = function(e) {
     if (e.target.className === 'grid') {
@@ -36,13 +51,22 @@ let handleCellUp = function(e) {
     if (a.classList.contains('grid__cell_active')) {
       a.classList.remove('grid__cell_active');
       a.classList.add('grid__cell_disabled')
-
+      if (a.classList.contains('bomb')) {
+        console.log('boom')
+        document.querySelectorAll('.bomb').forEach(e => {
+          e.classList.add('exposed');
+        })
+        // все события происходящие после проигрыша
+      }
     } 
 }
 
 let handleCellLeave = function(e) {
     e.target.classList.remove('grid__cell_active');
 }
+
+generateCells();
+setBombs();
 
 grid.addEventListener('contextmenu', (e) => {e.preventDefault()});
 grid.addEventListener('mousedown', handleCellDown);

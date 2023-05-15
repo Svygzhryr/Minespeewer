@@ -1,4 +1,11 @@
 @import '_vars';
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500&display=swap');
+
+body {
+  background-color: $bg;
+
+  overflow: hidden;
+}
 
 * {
   margin: 0;
@@ -58,6 +65,24 @@
     border: none;
   
   }
+}
+
+.clock {
+  color: $text;
+  background-color: $main;
+  font-size: 32px;
+
+  font-family: 'Rajdhani', sans-serif;
+
+  width: 100px;
+
+  margin: 0 auto;
+  margin-top: 20px;
+
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .bomb {

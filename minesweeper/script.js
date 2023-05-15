@@ -15,9 +15,27 @@ let grid = document.createElement("div");
 grid.className = "grid";
 app.appendChild(grid);
 
+let end = document.createElement('div');
+let restart = document.createElement('button');
+let endMessage = document.createElement('h2');
+endMessage.className = 'end__message';
+endMessage.innerHTML = `Game over in ${0} moves. Try again.`;
+end.className = 'end';
+restart.className = 'restart';
+restart.innerHTML = 'Restart'
+app.appendChild(end);
+end.appendChild(endMessage);
+end.appendChild(restart);
+
+let stopTimer = false;
+
 let updateClock = async function() {
   let digit = 0;
-  await setInterval(() => {
+  let timer = await setInterval(() => {
+    if (stopTimer) {
+      clearInterval(timer);
+      return
+    }
     digit++;
     let minutes = Math.floor(digit / 60);
     let seconds = Math.round(digit % 60);
@@ -78,7 +96,12 @@ let handleCellUp = function(e) {
         document.querySelectorAll(".bomb").forEach(e => {
           e.classList.add("exposed");
         })
+
         // все события происходящие после проигрыша
+        stopTimer = true;
+        setTimeout(() => {
+          end.classList.add('end_active');
+        }, 1500)
       }
     } 
 }

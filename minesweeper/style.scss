@@ -3,7 +3,7 @@
 
 body {
   background-color: $bg;
-
+  user-select: none;
   overflow: hidden;
 }
 
@@ -92,4 +92,65 @@ body {
 
 .exposed {
   color: $alt-active;
+}
+
+.end {
+  top: 50%;
+  left: 50%;
+
+  width: 418px;
+  height: 418px;
+
+  transform: translate(-50%, -50%);
+
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  background-color: $main;
+  position: absolute;
+  z-index: 5;
+
+  display: none;
+  opacity: 0;
+
+  transition: all .2s ease-in-out;
+
+
+  .end__message {
+    font-size: 40px;
+    color: $text;
+    font-family: 'Rajdhani', sans-serif;
+    text-align: center;
+    margin-bottom: 50px;
+
+  }
+}
+
+.restart {
+  width: 200px;
+  height: 60px;
+  border: none;
+  background-color: $alt;
+  color: $text;
+  font-size: 30px;
+
+  font-family: 'Rajdhani', sans-serif;
+
+
+  border-radius: 20px;
+
+  transition: all .2s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $alt-active;
+    color: $bg;
+  }
+}
+
+.end_active {
+  display: flex;
+  opacity: 1;
+  transition: all .2s ease-in-out;
 }

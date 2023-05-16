@@ -1,3 +1,7 @@
+let clicks = 0;
+let stopTimer = false;
+
+
 let app = document.createElement("section");
 app.className = "app";
 document.body.appendChild(app);
@@ -19,7 +23,7 @@ let end = document.createElement('div');
 let restart = document.createElement('button');
 let endMessage = document.createElement('h2');
 endMessage.className = 'end__message';
-endMessage.innerHTML = `Game over in ${0} moves. Try again.`;
+endMessage.innerHTML = `Game over in ${clicks} moves. Try again.`;
 end.className = 'end';
 restart.className = 'restart';
 restart.innerHTML = 'Restart'
@@ -27,7 +31,9 @@ app.appendChild(end);
 end.appendChild(endMessage);
 end.appendChild(restart);
 
-let stopTimer = false;
+let mask = document.createElement('div');
+mask.className = "mask";
+end.appendChild(mask);
 
 let updateClock = async function() {
   let digit = 0;
@@ -76,6 +82,15 @@ let setBombs = function() {
   }
 }
 
+let resetCells = function() {
+  document.querySelectorAll('.grid__cell').forEach(e => {
+    e.remove();
+  });
+  stopTimer = false;
+  clicks = 0;
+  startGame();
+}
+
 let handleCellDown = function(e) {
     if (e.target.className === "grid") {
         return null
@@ -90,7 +105,8 @@ let handleCellUp = function(e) {
     let a = e.target;
     if (a.classList.contains("grid__cell_active")) {
       a.classList.remove("grid__cell_active");
-      a.classList.add("grid__cell_disabled")
+      a.classList.add("grid__cell_disabled");
+      clicks++
       if (a.classList.contains("bomb")) {
         console.log("boom")
         document.querySelectorAll(".bomb").forEach(e => {
@@ -98,6 +114,8 @@ let handleCellUp = function(e) {
         })
 
         // все события происходящие после проигрыша
+        let moveString = clicks % 10 == 1 ? 'move' : 'moves';
+        endMessage.innerHTML = `Game over in ${clicks} ${moveString}. Try again.`;
         stopTimer = true;
         setTimeout(() => {
           end.classList.add('end_active');
@@ -106,17 +124,26 @@ let handleCellUp = function(e) {
     } 
 }
 
+let handleRestart = function() {
+  resetCells();
+  end.classList.remove('end_active');
+}
+
 let handleCellLeave = function(e) {
     e.target.classList.remove("grid__cell_active");
 }
 
-generateCells();
-// эту функцию можно вызывать после первого клика
-setBombs();
-updateClock();
+let startGame = function() {
+  generateCells();
+  setBombs();
+  updateClock();
+}
+
+startGame();
 
 grid.addEventListener("contextmenu", (e) => {e.preventDefault()});
 grid.addEventListener("mousedown", handleCellDown);
 grid.addEventListener("mouseup", handleCellUp);
 grid.addEventListener("mouseout", handleCellLeave);
+restart.addEventListener("click", handleRestart)
 

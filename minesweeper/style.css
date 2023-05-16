@@ -85,17 +85,19 @@ body {
 .end {
   top: 50%;
   left: 50%;
-  width: 418px;
-  height: 418px;
+  width: 350px;
+  height: 200px;
+  border-radius: 10px;
   transform: translate(-50%, -50%);
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #16161e;
+  background-color: #0e0e13;
   position: absolute;
   z-index: 5;
   display: none;
   opacity: 0;
+  padding: 10px;
   transition: all 0.2s ease-in-out;
 }
 .end .end__message {
@@ -103,17 +105,19 @@ body {
   color: #c0Caf5;
   font-family: "Rajdhani", sans-serif;
   text-align: center;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
+  z-index: 5;
 }
 
 .restart {
   width: 200px;
   height: 60px;
   border: none;
-  background-color: #262838;
+  background-color: #16161e;
   color: #c0Caf5;
   font-size: 30px;
   font-family: "Rajdhani", sans-serif;
+  z-index: 5;
   border-radius: 20px;
   transition: all 0.2s ease-in-out;
 }
@@ -127,4 +131,12 @@ body {
   display: flex;
   opacity: 1;
   transition: all 0.2s ease-in-out;
+}
+
+.mask {
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  z-index: 1;
+  background-color: hsla(240deg, 16%, 6%, 0.705);
 }/*# sourceMappingURL=style.css.map */

@@ -3,6 +3,7 @@ let stopTimer = false;
 let bombs = 10;
 let cells = 100;
 let checked = 1;
+let firstMove = true;
 
 let app = document.createElement("section");
 app.className = "app";
@@ -68,17 +69,16 @@ let generateCells = function() {
 
 }
 
-let setBombs = function() {
+let setBombs = function(e) {
   let sbombs = bombs;
   for (sbombs; sbombs > 0; sbombs--) {
     let randomPos = Math.round(Math.random() * 99);
     let cell = document.querySelector(`.cell${randomPos}`)
     console.log(randomPos);
-    if (cell.classList.contains("bomb")) {
+    if (cell.classList.contains("bomb") || cell == e.target) {
       sbombs++;
     } else {
       cell.classList.add("bomb");
-      cell.innerHTML = "*";
     }
   }
 }
@@ -136,8 +136,10 @@ let checkNeighbors = function(a) {
   
   if (bn) {
     // конвертация количества бомб рядом в интенсивность оттенков, сам придумал
-    a.style.color = `rgb(${bn*31}, 30, ${255 - bn*31})`
+    a.style.color = `rgb(${bn*31}, 60, ${255 - bn*31})`
     a.innerHTML = bn;
+  } else {
+
   }
 }
 
@@ -155,10 +157,16 @@ let handleCellUp = function(e) {
     let a = e.target;
     if (a.classList.contains("grid__cell_active")) {
       if (!a.classList.contains("grid__cell_disabled")) {
+        if (firstMove) {
+          firstMove = false;
+          setBombs(e);
+        }
         clicks++;
         if (a.classList.contains("bomb")) {
           console.log("boom")
           document.querySelectorAll(".bomb").forEach(e => {
+            e.innerHTML = "*";
+
             e.classList.add("exposed");
           })
           // все события происходящие после проигрыша
@@ -195,6 +203,7 @@ let handleCellUp = function(e) {
 }
 
 let handleRestart = function() {
+  firstMove = true;
   resetCells();
   end.classList.remove('end_active');
 }
@@ -205,7 +214,6 @@ let handleCellLeave = function(e) {
 
 let startGame = function() {
   generateCells();
-  setBombs();
   updateClock();
 }
 

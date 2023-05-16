@@ -77,7 +77,7 @@ body {
 }
 
 .bomb {
-  color: white;
+  color: transparent;
   font-size: 50px;
 }
 

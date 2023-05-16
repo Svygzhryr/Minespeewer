@@ -41,7 +41,6 @@ body {
   color: $active;
   font-size: 20px;
 
-
   transition: all .1s ease-in-out;
 
   &:hover {
@@ -88,7 +87,7 @@ body {
 }
 
 .bomb {
-  color: transparent;
+  color: white;
   font-size: 50px;
 }
 

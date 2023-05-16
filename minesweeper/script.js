@@ -1,5 +1,8 @@
 let clicks = 0;
 let stopTimer = false;
+let bombs = 10;
+let cells = 100;
+let checked = 1;
 
 let app = document.createElement("section");
 app.className = "app";
@@ -52,7 +55,7 @@ let updateClock = async function() {
 }
 
 let generateCells = function() {
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < cells; i++) {
       let cell = document.createElement("button");
       cell.className = `grid__cell cell${i}`;
       let x = (i % 10) + 1;
@@ -66,14 +69,13 @@ let generateCells = function() {
 }
 
 let setBombs = function() {
-  let bombs = 10;
-
-  for (bombs; bombs > 0; bombs--) {
+  let sbombs = bombs;
+  for (sbombs; sbombs > 0; sbombs--) {
     let randomPos = Math.round(Math.random() * 99);
     let cell = document.querySelector(`.cell${randomPos}`)
     console.log(randomPos);
     if (cell.classList.contains("bomb")) {
-      bombs++;
+      sbombs++;
     } else {
       cell.classList.add("bomb");
       cell.innerHTML = "*";
@@ -134,7 +136,7 @@ let checkNeighbors = function(a) {
   
   if (bn) {
     // конвертация количества бомб рядом в интенсивность оттенков, сам придумал
-    a.style.color = `rgb(${255 - bn*31}, 30, ${bn*31})`
+    a.style.color = `rgb(${bn*31}, 30, ${255 - bn*31})`
     a.innerHTML = bn;
   }
 }
@@ -159,7 +161,6 @@ let handleCellUp = function(e) {
           document.querySelectorAll(".bomb").forEach(e => {
             e.classList.add("exposed");
           })
-  
           // все события происходящие после проигрыша
           let moveString = clicks % 10 == 1 && clicks !== 11 ? 'move' : 'moves';
           endMessage.innerHTML = `Game over in ${clicks} ${moveString}. Try again.`;
@@ -169,6 +170,23 @@ let handleCellUp = function(e) {
           }, 1500)
         } else {
           checkNeighbors(a);
+        }
+        checked = 1;
+        document.querySelectorAll('.grid__cell_disabled').forEach(e => {
+          checked++;
+        })
+        console.log(cells - bombs)
+        if (checked == cells - bombs) {
+          document.querySelectorAll(".bomb").forEach(e => {
+            e.classList.add("exposed");
+          })
+          // события после выигрыша
+          let moveString = clicks % 10 == 1 && clicks !== 11 ? 'move' : 'moves';
+          endMessage.innerHTML = `Congrats! You won in ${clicks} ${moveString}.`;
+          stopTimer = true;
+          setTimeout(() => {
+            end.classList.add('end_active');
+          }, 1500)
         }
       }
       a.classList.remove("grid__cell_active");

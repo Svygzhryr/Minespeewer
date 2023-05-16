@@ -1,7 +1,6 @@
 let clicks = 0;
 let stopTimer = false;
 
-
 let app = document.createElement("section");
 app.className = "app";
 document.body.appendChild(app);
@@ -86,9 +85,58 @@ let resetCells = function() {
   document.querySelectorAll('.grid__cell').forEach(e => {
     e.remove();
   });
+  clock.innerHTML = "00:00";
   stopTimer = false;
   clicks = 0;
   startGame();
+}
+
+let checkNeighbors = function(a) {
+  let xcord = +a.dataset.x;
+  let ycord = +a.dataset.y;
+  let bn = 0;
+  
+  // проверка всех клеток по часовой начиная от верхней левой
+  // NorthWest, North, NorthEast, East, SouthEast, South, SouthWest, West
+  let nw = document.querySelector(`[data-x="${xcord-1}"][data-y="${ycord-1}"]`);
+  let n = document.querySelector(`[data-x="${xcord}"][data-y="${ycord-1}"]`);
+  let ne = document.querySelector(`[data-x="${xcord+1}"][data-y="${ycord-1}"]`);
+  let e = document.querySelector(`[data-x="${xcord+1}"][data-y="${ycord}"]`);
+  let se = document.querySelector(`[data-x="${xcord+1}"][data-y="${ycord+1}"]`);
+  let s = document.querySelector(`[data-x="${xcord}"][data-y="${ycord+1}"]`);
+  let sw = document.querySelector(`[data-x="${xcord-1}"][data-y="${ycord+1}"]`);
+  let w = document.querySelector(`[data-x="${xcord-1}"][data-y="${ycord}"]`);
+
+  if (nw) {
+    nw.classList.contains('bomb') ? bn++ : null;
+  }
+  if (n) {
+    n.classList.contains('bomb') ? bn++ : null;
+  }
+  if (ne) {
+    ne.classList.contains('bomb') ? bn++ : null;
+  }
+  if (e) {
+    e.classList.contains('bomb') ? bn++ : null;
+  }
+  if (se) {
+    se.classList.contains('bomb') ? bn++ : null;
+  }
+  if (s) {
+    s.classList.contains('bomb') ? bn++ : null;
+  }
+  if (sw) {
+    sw.classList.contains('bomb') ? bn++ : null;
+  }
+  if (w) {
+    w.classList.contains('bomb') ? bn++ : null;
+  }
+  
+  if (bn) {
+    // конвертация количества бомб рядом в интенсивность оттенков, сам придумал
+    a.style.color = `rgb(${255 - bn*31}, 30, ${bn*31})`
+    a.innerHTML = bn;
+  }
 }
 
 let handleCellDown = function(e) {
@@ -104,23 +152,27 @@ let handleCellDown = function(e) {
 let handleCellUp = function(e) {
     let a = e.target;
     if (a.classList.contains("grid__cell_active")) {
+      if (!a.classList.contains("grid__cell_disabled")) {
+        clicks++;
+        if (a.classList.contains("bomb")) {
+          console.log("boom")
+          document.querySelectorAll(".bomb").forEach(e => {
+            e.classList.add("exposed");
+          })
+  
+          // все события происходящие после проигрыша
+          let moveString = clicks % 10 == 1 && clicks !== 11 ? 'move' : 'moves';
+          endMessage.innerHTML = `Game over in ${clicks} ${moveString}. Try again.`;
+          stopTimer = true;
+          setTimeout(() => {
+            end.classList.add('end_active');
+          }, 1500)
+        } else {
+          checkNeighbors(a);
+        }
+      }
       a.classList.remove("grid__cell_active");
       a.classList.add("grid__cell_disabled");
-      clicks++
-      if (a.classList.contains("bomb")) {
-        console.log("boom")
-        document.querySelectorAll(".bomb").forEach(e => {
-          e.classList.add("exposed");
-        })
-
-        // все события происходящие после проигрыша
-        let moveString = clicks % 10 == 1 ? 'move' : 'moves';
-        endMessage.innerHTML = `Game over in ${clicks} ${moveString}. Try again.`;
-        stopTimer = true;
-        setTimeout(() => {
-          end.classList.add('end_active');
-        }, 1500)
-      }
     } 
 }
 

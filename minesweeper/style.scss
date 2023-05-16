@@ -39,6 +39,7 @@ body {
   border: none;
   border: 2px solid $highlight;
   color: $active;
+  font-size: 20px;
 
 
   transition: all .1s ease-in-out;
@@ -79,10 +80,11 @@ body {
   margin: 0 auto;
   margin-top: 20px;
 
-
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 6;
 }
 
 .bomb {

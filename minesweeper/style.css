@@ -38,6 +38,7 @@ body {
   border: none;
   border: 2px solid #393d50;
   color: #5a9dd7;
+  font-size: 20px;
   transition: all 0.1s ease-in-out;
 }
 .grid__cell:hover {
@@ -68,9 +69,11 @@ body {
   width: 100px;
   margin: 0 auto;
   margin-top: 20px;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 6;
 }
 
 .bomb {

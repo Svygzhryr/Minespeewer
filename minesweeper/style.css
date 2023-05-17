@@ -144,6 +144,16 @@ body {
   background-color: hsla(240deg, 16%, 6%, 0.705);
 }
 
+.flagged {
+  cursor: unset;
+  background-color: #0e0e13;
+  border: 2px solid #c96360;
+}
+.flagged:hover {
+  cursor: unset;
+  background-color: #0e0e13;
+}
+
 @media (max-width: 500px) {
   .grid__cell {
     width: 8vw;

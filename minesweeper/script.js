@@ -158,7 +158,9 @@ let handleCellDown = function(e) {
 }
 
 let handleCellUp = function(e) {
+    if (e.button == 2) {return}
     let a = e.target;
+    if (a.classList.contains("flagged")) {return}
     if (a.classList.contains("grid__cell_active")) {
       if (!a.classList.contains("grid__cell_disabled")) {
         if (firstMove) {
@@ -216,6 +218,19 @@ let handleCellLeave = function(e) {
     e.target.classList.remove("grid__cell_active");
 }
 
+let handleRMB = function(e) {
+  let a = e.target;
+  e.preventDefault();
+  if (!a.classList.contains("grid__cell_disabled") && a.classList.contains("grid__cell")) {
+    a.classList.toggle("flagged");
+  }
+
+
+
+
+  return false
+}
+
 let startGame = function() {
   generateCells();
   updateClock();
@@ -223,7 +238,7 @@ let startGame = function() {
 
 startGame();
 
-grid.addEventListener("contextmenu", (e) => {e.preventDefault()});
+grid.addEventListener("contextmenu", handleRMB, false);
 grid.addEventListener("mousedown", handleCellDown);
 grid.addEventListener("mouseup", handleCellUp);
 grid.addEventListener("mouseout", handleCellLeave);

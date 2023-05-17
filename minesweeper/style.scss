@@ -173,4 +173,16 @@ body {
   background-color: hsla(240, 16%, 6%, 0.705);
 }
 
+.flagged {
+  cursor: unset;
+  background-color: $bg;
+  border: 2px solid $alt-active;
+
+  &:hover {
+    cursor: unset;
+    background-color: $bg;
+
+  }
+}
+
 @import 'adaptive'

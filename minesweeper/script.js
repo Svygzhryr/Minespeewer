@@ -97,17 +97,18 @@ let checkNeighbors = function(a) {
   let xcord = +a.dataset.x;
   let ycord = +a.dataset.y;
   let bn = 0;
+  let l = 1;
   
   // проверка всех клеток по часовой начиная от верхней левой
   // NorthWest, North, NorthEast, East, SouthEast, South, SouthWest, West
-  let nw = document.querySelector(`[data-x="${xcord-1}"][data-y="${ycord-1}"]`);
-  let n = document.querySelector(`[data-x="${xcord}"][data-y="${ycord-1}"]`);
-  let ne = document.querySelector(`[data-x="${xcord+1}"][data-y="${ycord-1}"]`);
-  let e = document.querySelector(`[data-x="${xcord+1}"][data-y="${ycord}"]`);
-  let se = document.querySelector(`[data-x="${xcord+1}"][data-y="${ycord+1}"]`);
-  let s = document.querySelector(`[data-x="${xcord}"][data-y="${ycord+1}"]`);
-  let sw = document.querySelector(`[data-x="${xcord-1}"][data-y="${ycord+1}"]`);
-  let w = document.querySelector(`[data-x="${xcord-1}"][data-y="${ycord}"]`);
+  let nw = document.querySelector(`[data-x="${xcord-l}"][data-y="${ycord-l}"]`);
+  let n = document.querySelector(`[data-x="${xcord}"][data-y="${ycord-l}"]`);
+  let ne = document.querySelector(`[data-x="${xcord+l}"][data-y="${ycord-l}"]`);
+  let e = document.querySelector(`[data-x="${xcord+l}"][data-y="${ycord}"]`);
+  let se = document.querySelector(`[data-x="${xcord+l}"][data-y="${ycord+l}"]`);
+  let s = document.querySelector(`[data-x="${xcord}"][data-y="${ycord+l}"]`);
+  let sw = document.querySelector(`[data-x="${xcord-l}"][data-y="${ycord+l}"]`);
+  let w = document.querySelector(`[data-x="${xcord-l}"][data-y="${ycord}"]`);
 
   if (nw) {
     nw.classList.contains('bomb') ? bn++ : null;
@@ -139,6 +140,9 @@ let checkNeighbors = function(a) {
     a.style.color = `rgb(${bn*31}, 60, ${255 - bn*31})`
     a.innerHTML = bn;
   } else {
+    // два способа автооткрытия: 
+    // 1: непосредственно при нажатии будут определяться соседние бомбы их количество
+    // 2: при генерации бомб все соседние от них клетки будут прибавлять к себе их количество
 
   }
 }

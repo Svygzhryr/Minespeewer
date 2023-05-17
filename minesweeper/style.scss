@@ -30,6 +30,8 @@ body {
   grid-template-rows: repeat(10, 1fr);
   grid-column-gap: 2px;
   grid-row-gap: 2px;
+
+  margin-top: 20px;
 }
 
 .grid__cell {
@@ -74,10 +76,9 @@ body {
 
   font-family: 'Rajdhani', sans-serif;
 
-  width: 100px;
+  width: 82px;
 
-  margin: 0 auto;
-  margin-top: 20px;
+  margin: 20px auto;
 
   position: relative;
   display: flex;
@@ -171,3 +172,5 @@ body {
   z-index: 1;
   background-color: hsla(240, 16%, 6%, 0.705);
 }
+
+@import 'adaptive'

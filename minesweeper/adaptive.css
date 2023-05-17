@@ -1,0 +1,19 @@
+@media (max-width: 500px) {
+  .grid__cell {
+    width: 8vw;
+    height: 8vw;
+  }
+  .bomb {
+    font-size: 30px;
+  }
+  .end {
+    width: 200px;
+    height: 30vh;
+  }
+  .end .end__message {
+    font-size: 20px;
+  }
+  .end .restart {
+    width: 120px;
+  }
+}/*# sourceMappingURL=adaptive.css.map */

@@ -22,6 +22,11 @@ let grid = document.createElement("div");
 grid.className = "grid";
 app.appendChild(grid);
 
+let newGame = document.createElement('button');
+newGame.className = "restart restart_alt";
+newGame.innerHTML = "Reset"
+controls.appendChild(newGame)
+
 let end = document.createElement('div');
 let restart = document.createElement('button');
 let endMessage = document.createElement('h2');
@@ -38,9 +43,10 @@ let mask = document.createElement('div');
 mask.className = "mask";
 end.appendChild(mask);
 
+let timer;
 let updateClock = async function() {
   let digit = 0;
-  let timer = await setInterval(() => {
+  timer = await setInterval(() => {
     if (stopTimer) {
       clearInterval(timer);
       return
@@ -74,7 +80,6 @@ let setBombs = function(e) {
   for (sbombs; sbombs > 0; sbombs--) {
     let randomPos = Math.round(Math.random() * 99);
     let cell = document.querySelector(`.cell${randomPos}`)
-    console.log(randomPos);
     if (cell.classList.contains("bomb") || cell == e.target) {
       sbombs++;
     } else {
@@ -144,24 +149,22 @@ let resetCells = function() {
   startGame();
 }
 
-let checkNeighbors = function(a, xcord, ycord) {
-    //  else {
-    // два способа автооткрытия: 
-    // 1: непосредственно при нажатии будут определяться соседние бомбы их количество
-    // 2: при генерации бомб все соседние от них клетки будут прибавлять к себе их количество
-    // while (l < 10) {
-      
-    //   let nEl = document.querySelector(`[data-x="${xcord}"][data-y="${ycord-l}"]`);
-    //   let nnEl = document.querySelector(`[data-x="${xcord}"][data-y="${ycord-(l+1)}"]`);
-    //   console.log(nEl, nnEl)
-    //   if (!nnEl) {break}
-    //   if (nnEl.classList.contains("bomb")) {
+let checkNeighbors = function(el) {
+  // console.log(el);
 
-    //     break
-    //   }
-    //   l++;
-    // }
-    
+  // let xcord = +el.target.dataset.x;
+  // let ycord = +el.target.dataset.y;
+
+  // let n = document.querySelector(`[data-x="${xcord}"][data-y="${ycord-1}"]`);
+  // let e = document.querySelector(`[data-x="${xcord+1}"][data-y="${ycord}"]`);
+  // let s = document.querySelector(`[data-x="${xcord}"][data-y="${ycord+1}"]`);
+  // let w = document.querySelector(`[data-x="${xcord-1}"][data-y="${ycord}"]`);
+
+  // if (n.innerHTML == 0 && el.target.innerHTML == 0) {
+  //   console.log(n)
+  //   n.classList.add("grid__cell_disabled");
+  //   checkNeighbors(n);
+  // }
 }
 
 let handleCellDown = function(e) {
@@ -186,18 +189,20 @@ let handleCellUp = function(e) {
         if (firstMove) {
           firstMove = false;
           setBombs(e);
+          updateClock();
+
         }
 
         // окрашивание и появление текста в нажатой клетке в зависимости от количества ближайших бомб
         if (!e.target.classList.contains("bomb")) {
           let bn = e.target.innerHTML;
-          e.target.style.color = `rgb(${bn*31}, 60, ${255 - bn*31})`
+          e.target.style.color = `rgb(${bn*31}, 60, ${255 - bn*31})`;
+          checkNeighbors(e);
         }
 
         clicks++;
         // проверка на бомбу нажатой клетки
         if (a.classList.contains("bomb")) {
-          console.log("boom")
           document.querySelectorAll(".bomb").forEach(e => {
             e.innerHTML = "*";
 
@@ -216,7 +221,6 @@ let handleCellUp = function(e) {
         document.querySelectorAll('.grid__cell_disabled').forEach(e => {
           checked++;
         })
-        console.log(cells - bombs)
         if (checked == cells - bombs) {
           document.querySelectorAll(".bomb").forEach(e => {
             e.innerHTML = "*";
@@ -237,13 +241,14 @@ let handleCellUp = function(e) {
 }
 
 let handleRestart = function() {
+  clearInterval(timer);
   firstMove = true;
   resetCells();
   end.classList.remove('end_active');
 }
 
 let handleCellLeave = function(e) {
-    e.target.classList.remove("grid__cell_active");
+  e.target.classList.remove("grid__cell_active");
 }
 
 let handleRMB = function(e) {
@@ -257,7 +262,6 @@ let handleRMB = function(e) {
 
 let startGame = function() {
   generateCells();
-  updateClock();
 }
 
 startGame();
@@ -266,5 +270,6 @@ grid.addEventListener("contextmenu", handleRMB, false);
 grid.addEventListener("mousedown", handleCellDown);
 grid.addEventListener("mouseup", handleCellUp);
 grid.addEventListener("mouseout", handleCellLeave);
-restart.addEventListener("click", handleRestart)
+restart.addEventListener("click", handleRestart);
+newGame.addEventListener("click", handleRestart);
 

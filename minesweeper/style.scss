@@ -31,7 +31,6 @@ body {
   grid-column-gap: 2px;
   grid-row-gap: 2px;
 
-  margin-top: 20px;
 }
 
 .grid__cell {
@@ -70,6 +69,17 @@ body {
   }
 }
 
+.controls {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  column-gap: 20px;
+    
+  margin-top: 40px;
+}
+
 .clock {
   color: $text;
   background-color: $main;
@@ -79,7 +89,6 @@ body {
 
   width: 82px;
 
-  margin: 20px auto;
 
   position: relative;
   display: flex;
@@ -183,6 +192,17 @@ body {
     cursor: unset;
     background-color: $bg;
 
+  }
+}
+
+.restart_alt {
+  height: unset;
+  width: 82px;
+  font-size: 32px;
+  border-radius: 0;
+
+  &:hover {
+    background-color: $active;
   }
 }
 

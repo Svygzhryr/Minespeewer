@@ -93,9 +93,9 @@ let resetCells = function() {
   startGame();
 }
 
-let checkNeighbors = function(a) {
-  let xcord = +a.dataset.x;
-  let ycord = +a.dataset.y;
+let checkNeighbors = function(a, xcord, ycord) {
+  xcord = +a.dataset.x;
+  ycord = +a.dataset.y;
   let bn = 0;
   let l = 1;
   
@@ -143,7 +143,19 @@ let checkNeighbors = function(a) {
     // два способа автооткрытия: 
     // 1: непосредственно при нажатии будут определяться соседние бомбы их количество
     // 2: при генерации бомб все соседние от них клетки будут прибавлять к себе их количество
+    // while (l < 10) {
+      
+    //   let nEl = document.querySelector(`[data-x="${xcord}"][data-y="${ycord-l}"]`);
+    //   let nnEl = document.querySelector(`[data-x="${xcord}"][data-y="${ycord-(l+1)}"]`);
+    //   console.log(nEl, nnEl)
+    //   if (!nnEl) {break}
+    //   if (nnEl.classList.contains("bomb")) {
 
+    //     break
+    //   }
+    //   l++;
+    // }
+    
   }
 }
 
@@ -224,10 +236,6 @@ let handleRMB = function(e) {
   if (!a.classList.contains("grid__cell_disabled") && a.classList.contains("grid__cell")) {
     a.classList.toggle("flagged");
   }
-
-
-
-
   return false
 }
 

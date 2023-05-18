@@ -100,43 +100,35 @@ let setBombs = function(e) {
   
     if (nw && !nw.classList.contains("bomb")) {
       nw.innerHTML = +nw.innerHTML + 1;
-      let bn = nw.innerHTML;
-      nw.style.color = `rgb(${bn*31}, 60, ${255 - bn*31})`
+
     }
     if (n && !n.classList.contains("bomb")) {
       n.innerHTML = +n.innerHTML + 1;
-      let bn = n.innerHTML;
-      n.style.color = `rgb(${bn*31}, 60, ${255 - bn*31})`
+
     }
     if (ne && !ne.classList.contains("bomb")) {
       ne.innerHTML = +ne.innerHTML + 1;
-      let bn = ne.innerHTML;
-      ne.style.color = `rgb(${bn*31}, 60, ${255 - bn*31})`
+
     }
     if (e && !e.classList.contains("bomb")) {
       e.innerHTML = +e.innerHTML + 1;
-      let bn = e.innerHTML;
-      e.style.color = `rgb(${bn*31}, 60, ${255 - bn*31})`
+
     }
     if (se && !se.classList.contains("bomb")) {
       se.innerHTML= +se.innerHTML + 1;
-      let bn = se.innerHTML;
-      se.style.color = `rgb(${bn*31}, 60, ${255 - bn*31})`
+
     }
     if (s && !s.classList.contains("bomb")) {
       s.innerHTML = +s.innerHTML + 1;
-      let bn = s.innerHTML;
-      s.style.color = `rgb(${bn*31}, 60, ${255 - bn*31})`
+
     }
     if (sw && !sw.classList.contains("bomb")) {
       sw.innerHTML = +sw.innerHTML + 1;
-      let bn = sw.innerHTML;
-      sw.style.color = `rgb(${bn*31}, 60, ${255 - bn*31})`
+
     }
     if (w && !w.classList.contains("bomb")) {
       w.innerHTML = +w.innerHTML + 1;
-      let bn = w.innerHTML;
-      w.style.color = `rgb(${bn*31}, 60, ${255 - bn*31})`
+
     }
     
   })
@@ -183,16 +175,27 @@ let handleCellDown = function(e) {
 }
 
 let handleCellUp = function(e) {
+    // проверка пкм ли это
     if (e.button == 2) {return}
     let a = e.target;
+    // проверка на флажок
     if (a.classList.contains("flagged")) {return}
     if (a.classList.contains("grid__cell_active")) {
       if (!a.classList.contains("grid__cell_disabled")) {
+        // первый ли это ход
         if (firstMove) {
           firstMove = false;
           setBombs(e);
         }
+
+        // окрашивание и появление текста в нажатой клетке в зависимости от количества ближайших бомб
+        if (!e.target.classList.contains("bomb")) {
+          let bn = e.target.innerHTML;
+          e.target.style.color = `rgb(${bn*31}, 60, ${255 - bn*31})`
+        }
+
         clicks++;
+        // проверка на бомбу нажатой клетки
         if (a.classList.contains("bomb")) {
           console.log("boom")
           document.querySelectorAll(".bomb").forEach(e => {
@@ -200,6 +203,7 @@ let handleCellUp = function(e) {
 
             e.classList.add("exposed");
           })
+
           // все события происходящие после проигрыша
           let moveString = clicks % 10 == 1 && clicks !== 11 ? 'move' : 'moves';
           endMessage.innerHTML = `Game over in ${clicks} ${moveString}. Try again.`;
@@ -207,8 +211,6 @@ let handleCellUp = function(e) {
           setTimeout(() => {
             end.classList.add('end_active');
           }, 1500)
-        } else {
-          checkNeighbors(a);
         }
         checked = 1;
         document.querySelectorAll('.grid__cell_disabled').forEach(e => {

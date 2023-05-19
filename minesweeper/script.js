@@ -150,21 +150,37 @@ let resetCells = function() {
 }
 
 let checkNeighbors = function(el) {
-  // console.log(el);
+  let currentCell = el.target;
 
-  // let xcord = +el.target.dataset.x;
-  // let ycord = +el.target.dataset.y;
+  // let check = function() {
+   
+  //   let xcord = +currentCell.dataset.x;
+  //   let ycord = +currentCell.dataset.y;
+   
+  //   let n = document.querySelector(`[data-x="${xcord}"][data-y="${ycord-1}"]`);
+  //   let e = document.querySelector(`[data-x="${xcord+1}"][data-y="${ycord}"]`);
+  //   let s = document.querySelector(`[data-x="${xcord}"][data-y="${ycord+1}"]`);
+  //   let w = document.querySelector(`[data-x="${xcord-1}"][data-y="${ycord}"]`);
 
-  // let n = document.querySelector(`[data-x="${xcord}"][data-y="${ycord-1}"]`);
-  // let e = document.querySelector(`[data-x="${xcord+1}"][data-y="${ycord}"]`);
-  // let s = document.querySelector(`[data-x="${xcord}"][data-y="${ycord+1}"]`);
-  // let w = document.querySelector(`[data-x="${xcord-1}"][data-y="${ycord}"]`);
-
-  // if (n.innerHTML == 0 && el.target.innerHTML == 0) {
-  //   console.log(n)
-  //   n.classList.add("grid__cell_disabled");
-  //   checkNeighbors(n);
+  //   if (!n || !e || !s || !w) return;  
+  //   if (currentCell.innerHTML == 0) {
+  //     currentCell.classList.add("grid__cell_disabled")
+  //     switch (true) {
+  //       case (n.innerHTML == 0):
+  //         check(currentCell = n)
+  //         break
+  //       case (e.innerHTML == 0):
+  //         check(currentCell = e)
+  //       case (s.innerHTML == 0):
+  //         check(currentCell = s)
+  //         break
+  //       case (w.innerHTML == 0):
+  //         check(currentCell = w)
+  //     }
+  //   }
   // }
+
+  // check(el);
 }
 
 let handleCellDown = function(e) {

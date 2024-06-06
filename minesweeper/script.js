@@ -46,7 +46,7 @@ let mask = document.createElement("div");
 mask.className = "mask";
 end.appendChild(mask);
 
-let updateClock = async function () {
+async function updateClock() {
   let digit = 0;
   timer = setInterval(() => {
     if (isTimerStopped) {
@@ -61,9 +61,9 @@ let updateClock = async function () {
     seconds = seconds < 10 ? "0" + seconds : seconds;
     clock.innerHTML = `${minutes}:${seconds}`;
   }, 1000);
-};
+}
 
-let generateCells = function () {
+function generateCells() {
   for (let i = 0; i < cells; i++) {
     let cell = document.createElement("button");
     cell.className = `grid__cell cell${i}`;
@@ -73,9 +73,9 @@ let generateCells = function () {
     cell.setAttribute(`data-y`, y);
     grid.appendChild(cell);
   }
-};
+}
 
-let checkNeighbors = (x, y) => {
+function getNeighbors(x, y) {
   // проверка всех клеток по часовой начиная от верхней левой
   // NorthWest, North, NorthEast, East, SouthEast, South, SouthWest, West
   let nw = document.querySelector(`[data-x="${x - 1}"][data-y="${y - 1}"]`);
@@ -86,16 +86,15 @@ let checkNeighbors = (x, y) => {
   let s = document.querySelector(`[data-x="${x}"][data-y="${y + 1}"]`);
   let sw = document.querySelector(`[data-x="${x - 1}"][data-y="${y + 1}"]`);
   let w = document.querySelector(`[data-x="${x - 1}"][data-y="${y}"]`);
-
   return [nw, n, ne, e, se, s, sw, w];
-};
+}
 
-let setBombs = function (e) {
+function setBombs(firstClickedCell) {
   let sbombs = bombs;
   for (sbombs; sbombs > 0; sbombs--) {
     let randomPos = Math.round(Math.random() * 99);
     let cell = document.querySelector(`.cell${randomPos}`);
-    if (cell.classList.contains("bomb") || cell == e.target) {
+    if (cell.classList.contains("bomb") || cell == firstClickedCell) {
       sbombs++;
     } else {
       cell.classList.add("bomb");
@@ -107,15 +106,15 @@ let setBombs = function (e) {
     xcord = +cell.dataset.x;
     ycord = +cell.dataset.y;
 
-    const neighbors = checkNeighbors(xcord, ycord);
+    const neighbors = getNeighbors(xcord, ycord);
 
     neighbors.map((cell) => {
       if (cell && !cell.classList.contains("bomb")) ++cell.innerHTML;
     });
   });
-};
+}
 
-let resetCells = function () {
+function resetCells() {
   document.querySelectorAll(".grid__cell").forEach((e) => {
     e.remove();
   });
@@ -123,9 +122,9 @@ let resetCells = function () {
   isTimerStopped = false;
   clickCount = 0;
   startGame();
-};
+}
 
-let handleCellDown = function (e) {
+function handleMouseDown(e) {
   if (e.target.className === "grid") {
     return null;
   }
@@ -134,52 +133,64 @@ let handleCellDown = function (e) {
     a.classList.remove("grid__cell_active");
   }
   a.classList.add("grid__cell_active");
-};
+}
 
-let handleCellUp = function (e) {
+function endTheGame(isWon = false) {
+  document.querySelectorAll(".bomb").forEach((e) => {
+    e.innerHTML = "*";
+
+    e.classList.add("exposed");
+  });
+
+  let moveString = clickCount % 10 == 1 && clickCount !== 11 ? "move" : "moves";
+  endMessage.innerHTML = isWon
+    ? `Congrats! You won in ${clickCount} ${moveString}.`
+    : `Game over in ${clickCount} ${moveString}. Try again.`;
+  isTimerStopped = true;
+  setTimeout(() => {
+    end.classList.add("end_active");
+  }, 1500);
+}
+
+function handleMouseUp(event) {
+  let target = event.target;
+
   // проверка пкм ли это
-  if (e.button == 2) {
+  if (event.button == 2) {
     return;
   }
 
-  let a = e.target;
-  // проверка на флажок
-  if (a.classList.contains("flagged")) {
-    return;
-  }
+  clickCount++;
 
-  if (a.classList.contains("grid__cell_active")) {
-    if (!a.classList.contains("grid__cell_disabled")) {
+  function cellClickHandler(cell, isRecursive = false) {
+    // проверка на флажок
+    if (cell.classList.contains("flagged")) {
+      return;
+    }
+
+    if (
+      (cell.classList.contains("grid__cell_active") &&
+        !cell.classList.contains("grid__cell_disabled")) ||
+      (isRecursive && !cell.classList.contains("grid__cell_disabled"))
+    ) {
+      console.log("called");
+
       // первый ли это ход
       if (isFirstMove) {
         isFirstMove = false;
-        setBombs(e);
+        setBombs(cell);
         updateClock();
       }
 
       // окрашивание и появление текста в нажатой клетке в зависимости от количества ближайших бомб
-      if (!e.target.classList.contains("bomb")) {
-        let bn = e.target.innerHTML;
-        e.target.style.color = `rgb(${bn * 31}, 60, ${255 - bn * 31})`;
+      if (!cell.classList.contains("bomb")) {
+        let bn = cell.innerHTML;
+        cell.style.color = `rgb(${bn * 31}, 60, ${255 - bn * 31})`;
       }
 
-      clickCount++;
       // проверка на бомбу нажатой клетки
-      if (a.classList.contains("bomb")) {
-        document.querySelectorAll(".bomb").forEach((e) => {
-          e.innerHTML = "*";
-
-          e.classList.add("exposed");
-        });
-
-        // все события происходящие после проигрыша
-        let moveString =
-          clickCount % 10 == 1 && clickCount !== 11 ? "move" : "moves";
-        endMessage.innerHTML = `Game over in ${clickCount} ${moveString}. Try again.`;
-        isTimerStopped = true;
-        setTimeout(() => {
-          end.classList.add("end_active");
-        }, 1500);
+      if (cell.classList.contains("bomb")) {
+        endTheGame(false);
       }
 
       cellsChecked = 1;
@@ -188,37 +199,36 @@ let handleCellUp = function (e) {
       });
 
       if (cellsChecked == cells - bombs) {
-        document.querySelectorAll(".bomb").forEach((e) => {
-          e.innerHTML = "*";
-          e.classList.add("exposed");
-        });
-        // события после выигрыша
-        let moveString =
-          clickCount % 10 == 1 && clickCount !== 11 ? "move" : "moves";
-        endMessage.innerHTML = `Congrats! You won in ${clickCount} ${moveString}.`;
-        isTimerStopped = true;
-        setTimeout(() => {
-          end.classList.add("end_active");
-        }, 1500);
+        endTheGame(true);
       }
-    }
-    a.classList.remove("grid__cell_active");
-    a.classList.add("grid__cell_disabled");
-  }
-};
 
-let handleRestart = function () {
+      cell.classList.remove("grid__cell_active");
+      cell.classList.add("grid__cell_disabled");
+
+      if (cell.innerHTML) return;
+
+      const neighbors = getNeighbors(+cell.dataset.x, +cell.dataset.y);
+      neighbors.forEach((cell) => {
+        if (cell) cellClickHandler(cell, (isRecursive = true));
+      });
+    }
+  }
+
+  cellClickHandler(target);
+}
+
+function handleRestart() {
   clearInterval(timer);
   isFirstMove = true;
   resetCells();
   end.classList.remove("end_active");
-};
+}
 
-let handleCellLeave = function (e) {
+function handleMouseLeave(e) {
   e.target.classList.remove("grid__cell_active");
-};
+}
 
-let handleRMB = function (e) {
+function handleRMB(e) {
   let a = e.target;
   e.preventDefault();
   if (
@@ -228,17 +238,17 @@ let handleRMB = function (e) {
     a.classList.toggle("flagged");
   }
   return false;
-};
+}
 
-let startGame = function () {
+function startGame() {
   generateCells();
-};
-
-startGame();
+}
 
 grid.addEventListener("contextmenu", handleRMB, false);
-grid.addEventListener("mousedown", handleCellDown);
-grid.addEventListener("mouseup", handleCellUp);
-grid.addEventListener("mouseout", handleCellLeave);
+grid.addEventListener("mousedown", handleMouseDown);
+grid.addEventListener("mouseup", handleMouseUp);
+grid.addEventListener("mouseout", handleMouseLeave);
 restart.addEventListener("click", handleRestart);
 newGame.addEventListener("click", handleRestart);
+
+startGame();

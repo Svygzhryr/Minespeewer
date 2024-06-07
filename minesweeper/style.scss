@@ -1,6 +1,17 @@
 @import "_vars";
 @import url("https://fonts.googleapis.com/css2?family=Rajdhani:wght@500&display=swap");
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 body {
   background-color: $bg;
   user-select: none;
@@ -20,10 +31,9 @@ body {
 }
 
 .grid {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  width: fit-content;
+  height: fit-content;
+  margin: 20px auto;
 
   display: grid;
   grid-template-columns: repeat(10, 1fr);
@@ -196,6 +206,59 @@ body {
 
   &:hover {
     background-color: $active;
+  }
+}
+
+.bottomControls {
+  display: flex;
+  justify-content: center;
+
+  * {
+    margin: 0 10px;
+  }
+
+  input {
+    background-color: $main;
+    border: none;
+    height: 40px;
+    width: 60px;
+    padding: 0 8px;
+    color: $text;
+    font-size: 24px;
+    font-family: "Rajdhani", sans-serif;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.rowsInput {
+}
+
+.columnsInput {
+}
+
+.bombsInput {
+}
+
+.submitButton {
+  background-color: $main;
+  color: $text;
+  font-size: 24px;
+  padding: 0 4px;
+  border: none;
+
+  font-family: "Rajdhani", sans-serif;
+
+  z-index: 5;
+
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $alt-active;
+    color: $bg;
   }
 }
 

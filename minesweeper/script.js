@@ -10,31 +10,61 @@ let isFirstMove = true;
 
 let timer;
 
-let app = document.createElement("section");
+const app = document.createElement("section");
 app.className = "app";
 document.body.appendChild(app);
 
-let controls = document.createElement("div");
+const controls = document.createElement("div");
 controls.className = "controls";
 app.appendChild(controls);
 
-let clock = document.createElement("div");
+const clock = document.createElement("div");
 clock.className = "clock";
 clock.innerHTML = "00:00";
 controls.appendChild(clock);
 
-let grid = document.createElement("div");
+const grid = document.createElement("div");
 grid.className = "grid";
 app.appendChild(grid);
 
-let newGame = document.createElement("button");
+const newGame = document.createElement("button");
 newGame.className = "restart restart_alt";
 newGame.innerHTML = "Reset";
 controls.appendChild(newGame);
 
-let end = document.createElement("div");
-let restart = document.createElement("button");
-let endMessage = document.createElement("h2");
+const bottomControls = document.createElement("form");
+bottomControls.className = "bottomControls";
+app.appendChild(bottomControls);
+
+const columnsInput = document.createElement("input");
+columnsInput.setAttribute("type", "number");
+columnsInput.setAttribute("min", 5);
+columnsInput.setAttribute("max", 100);
+columnsInput.className = "columnsInput";
+bottomControls.appendChild(columnsInput);
+
+const rowsInput = document.createElement("input");
+rowsInput.setAttribute("type", "number");
+rowsInput.setAttribute("min", 5);
+rowsInput.setAttribute("max", 100);
+rowsInput.className = "rowsInput";
+bottomControls.appendChild(rowsInput);
+
+const bombsInput = document.createElement("input");
+bombsInput.setAttribute("type", "number");
+bombsInput.setAttribute("min", 1);
+bombsInput.setAttribute("max", cells - 1);
+bombsInput.className = "bombsInput";
+bottomControls.appendChild(bombsInput);
+
+const submitButton = document.createElement("button");
+submitButton.className = "submitButton";
+submitButton.innerHTML = "Submit";
+bottomControls.appendChild(submitButton);
+
+const end = document.createElement("div");
+const restart = document.createElement("button");
+const endMessage = document.createElement("h2");
 endMessage.className = "end__message";
 endMessage.innerHTML = `Game over in ${clickCount} moves. Try again.`;
 end.className = "end";
@@ -44,7 +74,7 @@ app.appendChild(end);
 end.appendChild(endMessage);
 end.appendChild(restart);
 
-let mask = document.createElement("div");
+const mask = document.createElement("div");
 mask.className = "mask";
 end.appendChild(mask);
 

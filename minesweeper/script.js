@@ -1,5 +1,7 @@
 const bombs = 10;
-const cells = 100;
+let fieldColumns = 10;
+let fieldRows = 10;
+const cells = fieldColumns * fieldRows;
 
 let clickCount = 0;
 let cellsChecked = 1;
@@ -63,12 +65,14 @@ async function updateClock() {
   }, 1000);
 }
 
-function generateCells() {
+function generateCells(cols, rows) {
+  grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+  grid.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
   for (let i = 0; i < cells; i++) {
     let cell = document.createElement("button");
     cell.className = `grid__cell cell${i}`;
-    let x = (i % 10) + 1;
-    let y = Math.floor(i / 10) + 1;
+    let x = (i % cols) + 1;
+    let y = Math.floor(i / cols) + 1;
     cell.setAttribute(`data-x`, x);
     cell.setAttribute(`data-y`, y);
     grid.appendChild(cell);
@@ -92,7 +96,7 @@ function getNeighbors(x, y) {
 function setBombs(firstClickedCell) {
   let sbombs = bombs;
   for (sbombs; sbombs > 0; sbombs--) {
-    let randomPos = Math.round(Math.random() * 99);
+    let randomPos = Math.round(Math.random() * (cells - 1));
     let cell = document.querySelector(`.cell${randomPos}`);
     if (cell.classList.contains("bomb") || cell == firstClickedCell) {
       sbombs++;
@@ -169,12 +173,9 @@ function handleMouseUp(event) {
     }
 
     if (
-      (cell.classList.contains("grid__cell_active") &&
-        !cell.classList.contains("grid__cell_disabled")) ||
-      (isRecursive && !cell.classList.contains("grid__cell_disabled"))
+      (cell.classList.contains("grid__cell_active") || isRecursive) &&
+      !cell.classList.contains("grid__cell_disabled")
     ) {
-      console.log("called");
-
       // первый ли это ход
       if (isFirstMove) {
         isFirstMove = false;
@@ -241,7 +242,7 @@ function handleRMB(e) {
 }
 
 function startGame() {
-  generateCells();
+  generateCells(fieldColumns, fieldRows);
 }
 
 grid.addEventListener("contextmenu", handleRMB, false);

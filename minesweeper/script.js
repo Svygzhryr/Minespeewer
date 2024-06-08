@@ -1,7 +1,7 @@
-const bombs = 10;
+let bombs = 10;
 let fieldColumns = 10;
 let fieldRows = 10;
-const cells = fieldColumns * fieldRows;
+let cells = fieldColumns * fieldRows;
 
 let clickCount = 0;
 let cellsChecked = 1;
@@ -36,10 +36,13 @@ const bottomControls = document.createElement("form");
 bottomControls.className = "bottomControls";
 app.appendChild(bottomControls);
 
+// в общем надо сделать просто три сложности
+
 const columnsInput = document.createElement("input");
 columnsInput.setAttribute("type", "number");
 columnsInput.setAttribute("min", 5);
 columnsInput.setAttribute("max", 100);
+columnsInput.setAttribute("placeholder", "cols");
 columnsInput.className = "columnsInput";
 bottomControls.appendChild(columnsInput);
 
@@ -47,6 +50,7 @@ const rowsInput = document.createElement("input");
 rowsInput.setAttribute("type", "number");
 rowsInput.setAttribute("min", 5);
 rowsInput.setAttribute("max", 100);
+rowsInput.setAttribute("placeholder", "rows");
 rowsInput.className = "rowsInput";
 bottomControls.appendChild(rowsInput);
 
@@ -54,12 +58,14 @@ const bombsInput = document.createElement("input");
 bombsInput.setAttribute("type", "number");
 bombsInput.setAttribute("min", 1);
 bombsInput.setAttribute("max", cells - 1);
+bombsInput.setAttribute("placeholder", "bombs");
 bombsInput.className = "bombsInput";
 bottomControls.appendChild(bombsInput);
 
 const submitButton = document.createElement("button");
 submitButton.className = "submitButton";
 submitButton.innerHTML = "Submit";
+submitButton.setAttribute("type", "submit");
 bottomControls.appendChild(submitButton);
 
 const end = document.createElement("div");
@@ -271,6 +277,22 @@ function handleRMB(e) {
   return false;
 }
 
+function handleSubmit(event) {
+  const target = event.target;
+  event.preventDefault();
+
+  const cols = columnsInput.value;
+  const rows = rowsInput.value;
+  const localbombs = bombsInput.value;
+
+  fieldColumns = cols;
+  fieldRows = rows;
+  bombs = localbombs;
+  cells = cols * rows;
+
+  resetCells();
+}
+
 function startGame() {
   generateCells(fieldColumns, fieldRows);
 }
@@ -281,5 +303,6 @@ grid.addEventListener("mouseup", handleMouseUp);
 grid.addEventListener("mouseout", handleMouseLeave);
 restart.addEventListener("click", handleRestart);
 newGame.addEventListener("click", handleRestart);
+bottomControls.addEventListener("submit", handleSubmit);
 
 startGame();

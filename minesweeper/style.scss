@@ -231,34 +231,25 @@ body {
       outline: none;
     }
   }
-}
 
-.rowsInput {
-}
+  button {
+    background-color: $main;
+    color: $text;
+    font-size: 24px;
+    padding: 0 4px;
+    border: none;
 
-.columnsInput {
-}
+    font-family: "Rajdhani", sans-serif;
 
-.bombsInput {
-}
+    z-index: 5;
 
-.submitButton {
-  background-color: $main;
-  color: $text;
-  font-size: 24px;
-  padding: 0 4px;
-  border: none;
+    transition: all 0.2s ease-in-out;
 
-  font-family: "Rajdhani", sans-serif;
-
-  z-index: 5;
-
-  transition: all 0.2s ease-in-out;
-
-  &:hover {
-    cursor: pointer;
-    background-color: $alt-active;
-    color: $bg;
+    &:hover {
+      cursor: pointer;
+      background-color: $alt-active;
+      color: $bg;
+    }
   }
 }
 

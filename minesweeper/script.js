@@ -1,4 +1,4 @@
-let bombs = 10;
+let fieldBombs = 10;
 let fieldColumns = 10;
 let fieldRows = 10;
 let cells = fieldColumns * fieldRows;
@@ -32,41 +32,26 @@ newGame.className = "restart restart_alt";
 newGame.innerHTML = "Reset";
 controls.appendChild(newGame);
 
-const bottomControls = document.createElement("form");
+const bottomControls = document.createElement("div");
 bottomControls.className = "bottomControls";
 app.appendChild(bottomControls);
 
 // в общем надо сделать просто три сложности
 
-const columnsInput = document.createElement("input");
-columnsInput.setAttribute("type", "number");
-columnsInput.setAttribute("min", 5);
-columnsInput.setAttribute("max", 100);
-columnsInput.setAttribute("placeholder", "cols");
-columnsInput.className = "columnsInput";
-bottomControls.appendChild(columnsInput);
+const easyButton = document.createElement("button");
+easyButton.className = "easyButton";
+easyButton.innerHTML = "Easy";
+bottomControls.appendChild(easyButton);
 
-const rowsInput = document.createElement("input");
-rowsInput.setAttribute("type", "number");
-rowsInput.setAttribute("min", 5);
-rowsInput.setAttribute("max", 100);
-rowsInput.setAttribute("placeholder", "rows");
-rowsInput.className = "rowsInput";
-bottomControls.appendChild(rowsInput);
+const mediumButton = document.createElement("button");
+mediumButton.className = "mediumButton";
+mediumButton.innerHTML = "Medium";
+bottomControls.appendChild(mediumButton);
 
-const bombsInput = document.createElement("input");
-bombsInput.setAttribute("type", "number");
-bombsInput.setAttribute("min", 1);
-bombsInput.setAttribute("max", cells - 1);
-bombsInput.setAttribute("placeholder", "bombs");
-bombsInput.className = "bombsInput";
-bottomControls.appendChild(bombsInput);
-
-const submitButton = document.createElement("button");
-submitButton.className = "submitButton";
-submitButton.innerHTML = "Submit";
-submitButton.setAttribute("type", "submit");
-bottomControls.appendChild(submitButton);
+const hardButton = document.createElement("button");
+hardButton.className = "hardButton";
+hardButton.innerHTML = "Hard";
+bottomControls.appendChild(hardButton);
 
 const end = document.createElement("div");
 const restart = document.createElement("button");
@@ -130,7 +115,7 @@ function getNeighbors(x, y) {
 }
 
 function setBombs(firstClickedCell) {
-  let sbombs = bombs;
+  let sbombs = fieldBombs;
   for (sbombs; sbombs > 0; sbombs--) {
     let randomPos = Math.round(Math.random() * (cells - 1));
     let cell = document.querySelector(`.cell${randomPos}`);
@@ -235,7 +220,7 @@ function handleMouseUp(event) {
         cellsChecked++;
       });
 
-      if (cellsChecked == cells - bombs) {
+      if (cellsChecked == cells - fieldBombs) {
         endTheGame(true);
       }
 
@@ -277,20 +262,32 @@ function handleRMB(e) {
   return false;
 }
 
-function handleSubmit(event) {
-  const target = event.target;
-  event.preventDefault();
+function handleDifficulty(diff) {
+  const obj = {
+    easy: {
+      cols: 10,
+      rows: 10,
+      bombs: 10,
+    },
+    medium: {
+      cols: 20,
+      rows: 10,
+      bombs: 30,
+    },
+    hard: {
+      cols: 30,
+      rows: 11,
+      bombs: 70,
+    },
+  };
 
-  const cols = columnsInput.value;
-  const rows = rowsInput.value;
-  const localbombs = bombsInput.value;
+  const { cols, rows, bombs } = obj[diff];
 
   fieldColumns = cols;
   fieldRows = rows;
-  bombs = localbombs;
+  fieldBombs = bombs;
   cells = cols * rows;
-
-  resetCells();
+  handleRestart();
 }
 
 function startGame() {
@@ -303,6 +300,14 @@ grid.addEventListener("mouseup", handleMouseUp);
 grid.addEventListener("mouseout", handleMouseLeave);
 restart.addEventListener("click", handleRestart);
 newGame.addEventListener("click", handleRestart);
-bottomControls.addEventListener("submit", handleSubmit);
+easyButton.addEventListener("click", () => {
+  handleDifficulty("easy");
+});
+mediumButton.addEventListener("click", () => {
+  handleDifficulty("medium");
+});
+hardButton.addEventListener("click", () => {
+  handleDifficulty("hard");
+});
 
 startGame();

@@ -199,8 +199,7 @@ body {
 .bottomControls input:focus {
   outline: none;
 }
-
-.submitButton {
+.bottomControls button {
   background-color: #16161e;
   color: #c0Caf5;
   font-size: 24px;
@@ -210,7 +209,7 @@ body {
   z-index: 5;
   transition: all 0.2s ease-in-out;
 }
-.submitButton:hover {
+.bottomControls button:hover {
   cursor: pointer;
   background-color: #c96360;
   color: #0e0e13;

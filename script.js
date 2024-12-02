@@ -162,7 +162,7 @@ function handleMouseDown(e) {
 
 function endTheGame(isWon = false) {
   document.querySelectorAll(".bomb").forEach((e) => {
-    e.innerHTML = "*";
+    e.innerHTML = "✴︎";
 
     e.classList.add("exposed");
   });
